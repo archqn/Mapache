@@ -58,26 +58,28 @@ func sub(client mqtt.Client, topic string) {
 
 func InitializeIngest() {
 	sub(Client, "meta")
+	subscribePong(Client)
 	subscribePedal(Client)
 	subscribeACU(Client)
 	subscribeBCM(Client)
 	subscribeWheel(Client)
-	subscribeSteeringWheel(Client)
 	subscribeVDM(Client)
-	subscribePong(Client)
+	subscribeMobile(Client)
+	subscribeInverter(Client)
 	go pingLoop()
 }
 
 func pingLoop() {
 	for {
-		vehicles := []string{"test"}
-		for _, vehicleID := range vehicles {
+		for _, vehicleID := range config.VehicleIDs {
 			lastPing, _ := service.GetLastPing(vehicleID)
 			if lastPing.ID != "" && lastPing.Pong == 0 {
 				lastSuccessfulPing, _ := service.GetLastSuccessfulPing(vehicleID)
 				if lastSuccessfulPing.ID != "" {
 					ago := time.Now().UnixMilli() - lastSuccessfulPing.Pong
-					utils.SugarLogger.Warnf("Last ping from vehicle %s was %dms ago!", vehicleID, ago)
+					if ago < 10000 || ago%600000 == 0 {
+						utils.SugarLogger.Warnf("Last ping from vehicle %s was %dms ago!", vehicleID, ago)
+					}
 				}
 			}
 			go publishPing(Client, vehicleID)
@@ -124,12 +126,17 @@ func subscribeWheel(client mqtt.Client) {
 	utils.SugarLogger.Infoln("[MQ] Subscribed to topic: gr24/+/wheel/+")
 }
 
-func subscribeSteeringWheel(client mqtt.Client) {
-	client.Subscribe("gr24/+/steering_wheel", 0, service.SteeringWheelIngestCallback)
-	utils.SugarLogger.Infoln("[MQ] Subscribed to topic: gr24/+/steering_wheel")
-}
-
 func subscribeVDM(client mqtt.Client) {
 	client.Subscribe("gr24/+/vdm", 0, service.VDMIngestCallback)
 	utils.SugarLogger.Infoln("[MQ] Subscribed to topic: gr24/+/vdm")
+}
+
+func subscribeMobile(client mqtt.Client) {
+	client.Subscribe("gr24/+/mobile", 0, service.MobileIngestCallback)
+	utils.SugarLogger.Infoln("[MQ] Subscribed to topic: gr24/+/mobile")
+}
+
+func subscribeInverter(client mqtt.Client) {
+	client.Subscribe("gr24/+/inverter", 0, service.InverterIngestCallback)
+	utils.SugarLogger.Infoln("[MQ] Subscribed to topic: gr24/+/inverter")
 }

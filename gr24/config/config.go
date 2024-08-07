@@ -10,11 +10,17 @@ import (
 
 var Service rincon.Service = rincon.Service{
 	Name:    "GR24",
-	Version: "1.2.0",
+	Version: "1.4.8",
 }
 
 var Routes = []string{
 	fmt.Sprintf("/%s/ping", strings.ToLower(Service.Name)),
+	"/ws/gr24/**",
+}
+
+var VehicleIDs = []string{
+	"gr24-main",
+	"testy",
 }
 
 var Env = os.Getenv("ENV")

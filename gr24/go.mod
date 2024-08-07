@@ -6,9 +6,10 @@ require (
 	github.com/bk1031/rincon-go v1.1.2
 	github.com/eclipse/paho.mqtt.golang v1.4.3
 	github.com/fatih/color v1.17.0
-	github.com/gaucho-racing/mapache-go v1.1.1
+	github.com/gaucho-racing/mapache-go v1.3.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
+	github.com/gorilla/websocket v1.5.0
 	go.uber.org/zap v1.27.0
 	gorm.io/driver/mysql v1.5.6
 	gorm.io/gorm v1.25.10
@@ -26,7 +27,6 @@ require (
 	github.com/go-playground/validator/v10 v10.20.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
